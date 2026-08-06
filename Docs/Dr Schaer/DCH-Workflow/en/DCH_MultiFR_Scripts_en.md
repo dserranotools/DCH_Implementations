@@ -370,7 +370,7 @@ WHEN MATCHED THEN
 PRINT '5_CONSOLIDATE_FR6 completed. FR1..FR5 consolidated into FR6.'
 ```
 
-> âš ï¸ **IMPORTANT**: The `COTypeId` of each FR corresponds to `ForecastRevisionsEnum`:
+> ⚠️ **IMPORTANT**: The `COTypeId` of each FR corresponds to `ForecastRevisionsEnum`:
 > - FR1 = 4
 > - FR2 = 5
 > - FR3 = 6

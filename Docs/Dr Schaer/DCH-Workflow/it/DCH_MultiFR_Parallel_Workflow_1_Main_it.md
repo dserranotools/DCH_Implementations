@@ -134,8 +134,8 @@ stateDiagram-v2
     [*] --> FASE1_INIT: Inizio ciclo
     
     state FASE1_INIT {
-        [*] --> ImportSO99: DCHRemote /IMPORT → Init FR1..FR6
-        ImportSO99 --> SetupPermessi: 1_SETUP_FR_PARALLEL + 3_UNFREEZE + CLEAR_CACHE
+        [*] --> ImportDCH: DCHRemote /IMPORT → Init FR1..FR6
+        ImportDCH --> SetupPermessi: 1_SETUP_FR_PARALLEL + 3_UNFREEZE + CLEAR_CACHE
         SetupPermessi --> Modifica: Utenti modificano FR1..FR5
     }
     
@@ -222,7 +222,7 @@ Sul server dove è in esecuzione DCH, creare:
 D:\DCH\Scripts\
 ```
 
-Copiare lì i seguenti file:
+Copiare lì i seguenti file: ([DCH_MultiFR_Scripts.md](./DCH_MultiFR_Scripts_en.md))
 - `1_SETUP_FR_PARALLEL.sql`
 - `2_FREEZE_ALL_WRITE.sql`
 - `3_UNFREEZE_ALL_WRITE.sql`
