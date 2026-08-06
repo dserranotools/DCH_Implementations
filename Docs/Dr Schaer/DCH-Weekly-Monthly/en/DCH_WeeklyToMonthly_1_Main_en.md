@@ -1,3 +1,8 @@
+| 📄 Main | [GlobalLink](DCH_WeeklyToMonthly_GlobalLink_en.md) | [HTML](DCH_WeeklyToMonthly_HTML_en.md) | [PowerBI](DCH_WeeklyToMonthly_PowerBI_en.md) | [SQL](DCH_WeeklyToMonthly_SQL_en.md) | [SSRS](DCH_WeeklyToMonthly_SSRS_en.md) |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+
+&nbsp;
+
 # DCH Weekly → Monthly Report
 
 ## Solution for generating a monthly report from Weekly configuration and displaying it within DCH

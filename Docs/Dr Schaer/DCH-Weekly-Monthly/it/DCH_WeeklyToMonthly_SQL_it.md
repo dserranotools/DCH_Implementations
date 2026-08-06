@@ -1,3 +1,8 @@
+| [Main](DCH_WeeklyToMonthly_1_Main_it.md) | [GlobalLink](DCH_WeeklyToMonthly_GlobalLink_it.md) | [HTML](DCH_WeeklyToMonthly_HTML_it.md) | [PowerBI](DCH_WeeklyToMonthly_PowerBI_it.md) | 📄 SQL | [SSRS](DCH_WeeklyToMonthly_SSRS_it.md) |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+
+&nbsp;
+
 # DCH Weekly → Monthly — Funzione SQL e Script
 
 **Cliente:** Dr. Schaer  

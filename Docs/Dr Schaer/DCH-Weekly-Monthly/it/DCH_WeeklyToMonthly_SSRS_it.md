@@ -1,3 +1,8 @@
+| [Main](DCH_WeeklyToMonthly_1_Main_it.md) | [GlobalLink](DCH_WeeklyToMonthly_GlobalLink_it.md) | [HTML](DCH_WeeklyToMonthly_HTML_it.md) | [PowerBI](DCH_WeeklyToMonthly_PowerBI_it.md) | [SQL](DCH_WeeklyToMonthly_SQL_it.md) | 📄 SSRS |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+
+&nbsp;
+
 # DCH Weekly → Monthly — Guida SSRS
 
 **Cliente:** Dr. Schaer  

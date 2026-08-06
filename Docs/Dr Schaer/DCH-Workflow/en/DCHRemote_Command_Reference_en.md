@@ -1,3 +1,8 @@
+| [Workflow](DCH_MultiFR_Parallel_Workflow_1_Main_en.md) | [Scripts](DCH_MultiFR_Scripts_en.md) | 📄 DCH Remote |
+|:---:|:---:|:---:|
+
+&nbsp;
+
 # DCH Remote — Command Reference
 
 **Client:** Dr. Schaer  

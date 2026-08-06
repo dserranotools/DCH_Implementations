@@ -1,3 +1,8 @@
+| [Main](DCH_WeeklyToMonthly_1_Main_it.md) | [GlobalLink](DCH_WeeklyToMonthly_GlobalLink_it.md) | [HTML](DCH_WeeklyToMonthly_HTML_it.md) | 📄 PowerBI | [SQL](DCH_WeeklyToMonthly_SQL_it.md) | [SSRS](DCH_WeeklyToMonthly_SSRS_it.md) |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+
+&nbsp;
+
 # DCH Weekly → Monthly — Alternativa: Power BI
 
 **Cliente:** Dr. Schaer  
@@ -211,3 +216,6 @@ Questa è la **principale sfida** di Power BI rispetto a SSRS: l'autenticazione 
 > **Data**: 2026-08-05  
 > **Ambito**: DCH 440 — Modalità Weekly  
 > **Cliente**: Dr. Schaer
+
+| [Main](DCH_WeeklyToMonthly_1_Main_it.md) | [GlobalLink](DCH_WeeklyToMonthly_GlobalLink_it.md) | [HTML](DCH_WeeklyToMonthly_HTML_it.md) | 📄 PowerBI | [SQL](DCH_WeeklyToMonthly_SQL_it.md) | [SSRS](DCH_WeeklyToMonthly_SSRS_it.md) |
+|:---:|:---:|:---:|:---:|:---:|:---:|

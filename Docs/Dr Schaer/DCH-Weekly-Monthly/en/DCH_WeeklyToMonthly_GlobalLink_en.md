@@ -1,3 +1,8 @@
+| [Main](DCH_WeeklyToMonthly_1_Main_en.md) | 📄 GlobalLink | [HTML](DCH_WeeklyToMonthly_HTML_en.md) | [PowerBI](DCH_WeeklyToMonthly_PowerBI_en.md) | [SQL](DCH_WeeklyToMonthly_SQL_en.md) | [SSRS](DCH_WeeklyToMonthly_SSRS_en.md) |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+
+&nbsp;
+
 # DCH Weekly → Monthly — Global Link Configuration
 
 **Client:** Dr. Schaer  
