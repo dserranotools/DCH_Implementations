@@ -2,7 +2,7 @@
 
 > **Estado:** Aprobado / Diseño Técnico Consolidado  
 > **Fecha:** 2026-09-08  
-> **Autor:** DCH Insights Team & Antigravity  
+> **Autor:** DCH Insights Team  
 > **Versión:** 2.0 (Consolidación Arquitectura Enterprise & DCHConverter)
 
 ---

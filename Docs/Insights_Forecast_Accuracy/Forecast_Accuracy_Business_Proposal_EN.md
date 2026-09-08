@@ -5,7 +5,7 @@
 > **Status:** Proposal Architecture & Functional Specification  
 > **Date:** 2026-09-07  
 > **Version:** 2.0 (Enterprise Scalable & FVA Enabled)  
-> **Author:** DCH Team  
+> **Author:** DCH Insights Team  
 
 ---
 

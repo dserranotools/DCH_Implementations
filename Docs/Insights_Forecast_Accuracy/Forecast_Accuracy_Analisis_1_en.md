@@ -3,7 +3,7 @@
 
 > **Status:** Proposal / Consolidated Technical Design  
 > **Date:** 2026-09-07  
-> **Author:** DCH Insights Team & Antigravity  
+> **Author:** DCH Insights Team  
 > **Version:** 2.0 (Enterprise Architecture & DCHConverter Consolidation)  
 
 ---
