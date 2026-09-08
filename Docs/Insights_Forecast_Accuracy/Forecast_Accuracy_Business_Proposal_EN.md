@@ -2,10 +2,10 @@
 ## Product Specification & Functional Architecture
 
 > **Target Audience:** Product Management, Functional Leads, Product Designers, Engineering Leads  
-> **Status:** Approved Architecture & Functional Specification  
-> **Date:** September 2026  
+> **Status:** Proposal Architecture & Functional Specification  
+> **Date:** 2026-09-07  
 > **Version:** 2.0 (Enterprise Scalable & FVA Enabled)  
-> **Author:** DCH Product & Architecture Team  
+> **Author:** DCH Team  
 
 ---
 
