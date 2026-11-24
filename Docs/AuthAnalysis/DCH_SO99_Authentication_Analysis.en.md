@@ -293,35 +293,35 @@ DCH defines **4 business roles** with increasing privilege levels:
 ### 4.2. Authorization Mechanisms
 
 ```mermaid
-graph TB
-    USER[("Authenticated User")]
+flowchart TB
+    USER[Authenticated User]
     
-    subgraph MIDDLEWARE["Middleware / Filters"]
-        RP[RolesPermissionsFilter<br/>(MVC Controllers)]
-        UP[UserPermissionsAttribute<br/>(Feature Permissions)]
-        API[APIAuthorizeAttribute<br/>(Internal Web API)]
-        ASF[ApiSecurityFilter<br/>(Remote / External API)]
+    subgraph MIDDLEWARE[Middleware / Filters]
+        RP[RolesPermissionsFilter - MVC Controllers]
+        UP[UserPermissionsAttribute - Feature Permissions]
+        API[APIAuthorizeAttribute - Internal Web API]
+        ASF[ApiSecurityFilter - Remote / External API]
     end
     
-    subgraph SOURCE["Data Source"]
-        SESSION[(Session<br/>CurrentUserRoles)]
-        USERINFO[(UserInfo<br/>PermissionInformation)]
-        LIC[(Active Licenses)]
-        CFG[(Config API Key + IP)]
+    subgraph SOURCE[Data Source]
+        SESSION(Session - CurrentUserRoles)
+        USERINFO(UserInfo - PermissionInformation)
+        LIC(Active Licenses)
+        CFG(Config API Key + IP)
     end
     
-    subgraph LOGIC["Authorization Logic"]
-        CHK_ROLE[Check Role<br/>in StringCollection]
-        CHK_PERM[Check Feature<br/>+ Active Licenses]
+    subgraph LOGIC[Authorization Logic]
+        CHK_ROLE[Check Role in StringCollection]
+        CHK_PERM[Check Feature + Active Licenses]
         CHK_IP[Check Source IP]
-        CHK_KEY[Check ApiKey<br/>header]
+        CHK_KEY[Check ApiKey header]
     end
     
-    subgraph OUTCOME["Result"]
-        OK[✅ 200 OK]
-        REDIRECT[↩️ Redirect to Login/Home]
-        FORBIDDEN[🚫 403 Forbidden]
-        JSON_ERR[📄 JSON Error + Login URL]
+    subgraph OUTCOME[Result]
+        OK[200 OK]
+        REDIRECT[Redirect to Login/Home]
+        FORBIDDEN[403 Forbidden]
+        JSON_ERR[JSON Error + Login URL]
     end
     
     RP --> CHK_ROLE
