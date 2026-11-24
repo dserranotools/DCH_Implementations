@@ -1,3 +1,8 @@
+| 📄 Technical Analysis | [Executive Summary](DCH_SO99_Authentication_ExecutiveSummary.en.md) | [README](README.md) |
+|:---:|:---:|:---:|
+
+&nbsp;
+
 # DCH & SO99+ — Authentication & Authorization Technical Analysis
 
 > **Purpose:** Technical reference for the meeting with the Senior Director, Product Management.
