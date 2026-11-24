@@ -1,169 +1,167 @@
-| [README](README.md) | [Full Analysis](DCH_SO99_Authentication_Analysis.en.md) | 📄 Executive Summary |
-|:---:|:---:|:---:|
-
-&nbsp;
-
 # DCH & SO99+ — Authentication & Authorization: Executive Summary
 
 > **To:** Senior Director, Product Management
-> **Prepared for:** Meeting on authentication and alignment with SO99
+> **Context:** Meeting on DCH's authentication and authorization mechanism and its alignment with SO99+
+> **Reading time:** ~10 minutes
 > **Date:** November 2026
 
 ---
 
-## What problem does this solve?
+## 1. Two questions every application answers
 
-Every time a user opens **DCH** or **SO99+**, the system must answer two questions:
+| Question | Name | Example |
+|---|---|---|
+| **Who are you?** | Authentication | Logging in with a password, a corporate account, or Windows |
+| **What can you do?** | Authorization | Which screens, functions, and data a user can see or change |
 
-1. **Who are you?** → *Authentication* (login, password, SAML, Azure AD...)
-2. **What can you do?** → *Authorization* (what data you see, which buttons appear)
+**An analogy that applies to both products:** think of an office building.
 
-Today each product answers these questions **on its own**, with similar but not identical technologies. The business question is: **should we align our approach?**
+- The **reception desk** checks your ID → this is the **identity provider** (Azure AD, a SAML provider, Windows).
+- Each **office** has its own list of who may enter and what they can touch → these are **DCH** and **SO99+**.
+- Being accepted at reception does not open every office: **each office keeps its own list.**
 
 ---
 
-## The current landscape (in 1 minute)
+## 2. How it works today
 
 ```mermaid
-graph LR
-    subgraph USERS["Users"]
-        U1[Plant User]
-        U2[TGsito Admin]
-    end
-
-    subgraph APPS["ToolsGroup Applications"]
-        DCH[DCH<br/>Demand Chain Hub]
-        SO99[SO99+<br/>Order Management]
-    end
-
-    subgraph IDP["Who validates identity?"]
-        AAD[Azure AD<br/>SAML / OIDC]
-        LOCAL[(Local DB<br/>DCH / SO99)]
-    end
-
-    U1 --> AAD
-    U2 --> AAD
-    U2 --> LOCAL
-    AAD --> DCH
-    AAD --> SO99
-    LOCAL --> DCH
-    LOCAL --> SO99
-
-    DCH -.->|API Key / OAuth| SO99
+flowchart LR
+    U["User"] --> IDP["Identity provider<br/>Azure AD · SAML · Windows<br/>(or the product's own login)"]
+    IDP -->|"confirms who the user is"| DCH["DCH<br/>own users · 4 roles · detailed permissions"]
+    IDP -->|"confirms who the user is"| SO99["SO99+<br/>own users · admin/user · server permissions"]
+    DCH -.->|"reads SO99+ data<br/>directly from its database"| SO99
 ```
 
-**Two applications that can share the same identity provider (Azure AD), but each manages its own users and permissions independently.**
+**Both products follow the same pattern:** the identity provider confirms who the user is, and each product then decides, with its own users and rules, whether the user can get in and what they can do.
 
 ---
 
-## How DCH works
+## 3. DCH at a glance
 
-| Access mode | Status | What is it for? |
-|-------------|--------|-----------------|
-| **SAML 2.0** (via Azure AD, ADFS...) | ✅ Active | Corporate standard. One click → login with corporate credentials |
-| **Azure AD multi-tenant** | ✅ Active | Modern variant (OpenID Connect). Any Azure AD tenant can log in |
-| **Internal User/Password** | ✅ Active | Classic login with username and password stored in DCH database |
-| **Windows Auth** (on-prem AD) | ✅ Active | For environments without Azure (intranets) |
+**How users log in** (one mode chosen per installation)
 
-**Who can log in:** DCH decides against its own database. Even if you authenticate via Azure AD, DCH checks: *"Does this user exist in my user list? Are they active?"*
+| Mode | What the user experiences |
+|---|---|
+| DCH username/password | Classic login screen |
+| Windows | No login screen: the Windows session is used |
+| SAML 2.0 | "Login with corporate account" → customer's login page (e.g. Azure AD) |
+| SAML + DCH users | Both options on the same screen |
+| Azure AD multi-tenant | Microsoft login page, accepting any Azure AD organization |
 
-**What they can do:** DCH has **4 roles** (Admin, PowerUser, MasterData, User) and a very granular permission system: read/write by data type (demand, forecast, promotions...), by unit of measure, by product group, etc.
+**Who can get in:** only users registered in DCH and marked *Active*, even when the login is done by Azure AD or SAML. Deactivating a user in DCH blocks their access, even if the identity provider still accepts them.
 
----
+**What they can do** — three layers, all managed inside DCH:
 
-## How SO99+ works
+1. **Role** — Admin, PowerUser, MasterData, User: which screens can be opened.
+2. **Feature permission** — e.g. Forecast Editing or Promotions, always combined with the customer's licenses.
+3. **Data permission** — exactly which data can be read or edited (series, revisions, units of measure, attributes, data groups).
 
-| Access mode | Status | What is it for? |
-|-------------|--------|-----------------|
-| **SO99PLUS** (built-in) | ✅ Active | Login with username/password against the SO99 backend |
-| **SAML 2.0** | ✅ Active | Same standard as DCH. Via ComponentSpace |
-| **Azure AD** (Microsoft.Identity.Web) | ✅ Active | Modern Microsoft Entra ID integration |
-| **Auth0** | ✅ Active | Alternative external Identity Provider |
-| **Windows Auth** | ✅ Active | On-premise environments |
-
-**Who can log in:** The SO99+ backend (Win32 application) validates credentials. It also accepts SAML and Azure AD logins.
-
-**What they can do:** SO99+ has a simpler model: **admin** or **user**. Fine-grained permissions are managed internally by the SO99 backend.
+**Security basics:** account lockout after repeated failures, configurable password policy and expiration, session expiration, protection against automated attacks, and a security log. MFA is not built into DCH; it is enforced by the customer's identity provider.
 
 ---
 
-## How DCH and SO99+ communicate
+## 4. SO99+ at a glance
 
-```
-DCH  ────────────────>  SO99+ WebAPI
-     (Shared API Key
-      or OAuth 2.0)
-```
+**How users log in**
 
-DCH calls the SO99+ API to read forecast and demand data. They use a **shared secret key** (API Key) or a configured **OAuth token**. This is machine-to-machine communication, with no user interaction.
+| Mode | What the user experiences |
+|---|---|
+| SO99+ username/password | Classic login screen |
+| Windows | No login screen: the Windows session is used |
+| SAML 2.0 | Customer's corporate login page |
+| SAML + SO99+ users | Both options on the same screen |
+| Azure AD | Microsoft login page for the customer's organization |
+| Auth0 | Auth0 login page |
 
----
+**Who can get in:** the **SO99+ server** always takes the final decision, whatever the login mode. Azure AD, SAML, or Auth0 only confirm the identity.
 
-## SO99 alignment — Quick comparison
+**What they can do:** the web application distinguishes `admin` and `user`; detailed permissions are configured and enforced by the SO99+ server.
 
-| Aspect | DCH | SO99+ | Compatible? |
-|--------|-----|-------|:---:|
-| **SAML 2.0** | ComponentSpace | ComponentSpace | ✅ Same library |
-| **Azure AD** | MSAL (manual) | Microsoft.Identity.Web | ✅ Same IdP possible |
-| **Roles from IdP** | ❌ Not mapped | ❌ Not mapped | ✅ Same limitation |
-| **Granular permissions** | ✅ Very mature | ⚠️ Basic | DCH is more complete |
+**Integrations (WebAPI):** other systems call SO99+ with an API key (full access) or with OAuth 2.0 tokens that separate read and write permissions.
 
 ---
 
-## Can we integrate? What do we recommend?
+## 5. How the two products are connected today
 
-### ✅ Yes we can — with concrete steps from the SO99+ side
+| | Situation |
+|---|---|
+| **Data** | DCH reads SO99+ data **directly from the SO99+ database** |
+| **Users** | Separate: a person using both products has one user in each |
+| **Roles and permissions** | Separate, with different models |
+| **Login session** | Separate: logging into one does not log into the other |
 
-1. **Unify the Identity Provider (Azure AD)**
-   - Already configured in both (SAML and OIDC)
-   - Cost: near zero. Configuration change
-   - Benefit: unified access policies, MFA, and lifecycle management
-
-2. **Define a common role model**
-   - DCH has 4 well-defined, battle-tested roles
-   - Could serve as a reference for SO99+
-
-3. **Read Azure AD groups to assign roles automatically**
-   - Nobody does this today. It would be a maturity leap
+> **In short:** the products are connected at the **data** level, not at the **identity** level.
 
 ---
 
-## Meeting summary
+## 6. Compatibility at a glance
 
-```
-┌──────────────────────────────────────────────────────────┐
-│                                                          │
-│  🟢  DCH and SO99+ ALREADY SHARE THE SAME IdP (Azure AD)│
-│                                                          │
-│  🟡  DCH has a better permission model than SO99+       │
-│                                                          │
-│  💡  Alignment is feasible with configuration            │
-│      changes, not architecture overhauls                 │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
-```
+| | DCH | SO99+ | Assessment |
+|---|---|---|---|
+| SAML 2.0 | ✅ | ✅ | 🟢 Same library and protocol — one customer IdP can serve both |
+| Azure AD | ✅ | ✅ | 🟢 Compatible — for one customer, DCH uses its SAML mode |
+| Windows / AD | ✅ | ✅ | 🟢 Compatible |
+| MFA | Via the IdP | Via the IdP | 🟢 Same approach |
+| Auth0 | ❌ | ✅ | 🟡 SO99+ only (Auth0 could act as a SAML provider for DCH) |
+| User lists | Own | Own | 🟡 Users must be maintained in both |
+| Roles & permissions | 4 roles + detailed permissions | admin/user + server permissions | 🔴 Different models, no direct equivalence |
+| Shared session | ❌ | ❌ | 🔴 Each product has its own |
 
 ---
 
-## Suggested timeline
+## 7. Can they be integrated?
+
+**Yes — at the identity level, with configuration only (no development).**
+
+Both products are registered as two applications in the customer's identity provider (typically Azure AD via SAML):
 
 ```mermaid
-gantt
-    title DCH ↔ SO99+ Alignment
-    dateFormat  YYYY-MM-DD
-    axisFormat  %b %Y
-    
-    section Short Term
-    Unify Azure AD IdP             :done, 2026-12-01, 2027-02-01
+sequenceDiagram
+    actor U as User
+    participant IdP as Customer identity provider
+    participant D as DCH
+    participant S as SO99+
 
-    section Mid Term
-    Common role model              :active, 2027-02-01, 2027-05-01
-    Roles from Azure AD Groups     :        2027-04-01, 2027-07-01
-
-    section Long Term
-    Shared architecture            :        2027-09-01, 2028-06-01
+    U->>D: Open DCH
+    D->>IdP: Who is this user?
+    U->>IdP: Corporate login (password + MFA)
+    IdP-->>D: Confirmed
+    D-->>U: DCH opens with DCH permissions
+    U->>S: Later, open SO99+
+    S->>IdP: Who is this user?
+    Note over IdP: Already logged in:<br/>no credentials asked again
+    IdP-->>S: Confirmed
+    S-->>U: SO99+ opens with SO99+ permissions
 ```
+
+| What the customer gets | What is needed |
+|---|---|
+| One corporate login for both products | Configuration in both products and in the customer's IdP |
+| No second password prompt while the corporate session is active | The **same username** in DCH and SO99+ |
+| MFA, password rules, and leaver blocking managed in one place | A corporate identity provider (SAML or Azure AD) |
+
+**What remains separate:** users still have to exist in both products, and roles and permissions are still managed in each product.
 
 ---
 
-*Document generated from the full technical analysis of both codebases: DCH (ASP.NET 4.8 / VB.NET) and SO99+ (.NET Core 8 / C#). The detailed technical document is available for deeper dives.*
+## 8. Key messages for the meeting
+
+| | Message |
+|---|---|
+| 🟢 | DCH and SO99+ share the same security model: identity comes from outside, permissions are managed inside |
+| 🟢 | The same customer identity provider can serve both products today, through configuration |
+| 🟡 | Users are maintained separately in each product |
+| 🔴 | Roles and permissions follow different models and cannot be mapped automatically |
+| 💡 | Aligning **identity** is configuration; aligning **roles and permissions** is a product decision |
+
+---
+
+## 9. Questions to decide
+
+1. What does "alignment with SO99" mean for us: same login experience, same role model, or technical integration?
+2. Do shared customers already have a corporate identity provider, and which login mode do they use today in each product?
+3. Do we need a common role model across products, or does each product keep its own?
+
+---
+
+*Based on code analysis of DCH 4.40 and SO99+ 2026.3. Step-by-step flows and technical details are in the Technical Analysis document.*
